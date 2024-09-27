@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Form Invoice Elegan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            background-color: #f0f4f8;
+            color: #333;
+            overflow: hidden;
+        }
+        .container-left, .container-right {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 10px;
+        }
+        .container-left {
+          width: 60%;
+          max-height: 85vh; /* Atur tinggi maksimum, misalnya 80% dari tinggi viewport */
+          overflow-y: auto; /* Aktifkan scrolling vertikal */
+        }
+      
+        /* Opsional: Styling untuk scrollbar */
+        .container-left::-webkit-scrollbar {
+          width: 10px;
+        }
+      
+        .container-left::-webkit-scrollbar-track {
+          background: #f1f1f1;
+        }
+      
+        .container-left::-webkit-scrollbar-thumb {
+          background: #888;
+          border-radius: 5px;
+        }
+      
+        .container-left::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
+        .container-right {
+            width: 30%;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+        .company-info, .customer-info {
+            width: 50%;
+            margin-top: 20px;
+        }
+        .invoice-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px;
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 8px 0;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            background-color: transparent;
+            outline: none;
+            transition: border-color 0.3s;
+            font-size: 15px;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus {
+            border-bottom-color: #4CAF50;
+        }
+        .total-section {
+            margin-top: 30px;
+            text-align: left;
+            font-size: 17px;
+        }
+        .terms {
+            margin-top: 30px;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    .invoice-list {
+        margin-top: 20px;
+        height: 500px; /* Atur tinggi yang diinginkan */
+        overflow-y: auto; /* Tambahkan scroll bar vertikal */
+        border: 1px solid #e0e0e0; /* Tambahkan border untuk pemisahan */
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #fff; /* Latar belakang putih untuk kontras */
+    }
+        .invoice-item {
+            background-color: #fff;
+            padding: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .invoice-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .invoice-item button {
+            margin-left: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .edit-btn:hover, .delete-btn:hover {
+            opacity: 0.8;
+        }
+        .add-item-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .add-item-btn:hover {
+            background-color: #45a049;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .action-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            margin-left: 10px;
+        }
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+        .customer-info input {
+            padding: 8px;
+            font-size: 15px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            width: 70%;
+            margin-left: 15%;
+            margin-top: 50px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .view-btn {
+            background-color: #008CBA;
+            color: white;
+        }
+        .view-btn:hover {
+            background-color: #007B9A;
+        }
+        #dp{
+            width: 500px;
+            font-size: 17px;
+        }
+        #qty{
+            width: 100px;
+        }
+        #item{
+            width: 350px;
+        }
+        #price{
+            width: 150px;
+        }
+        #customer-name #invoice-date{
+            width: 50px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        h2{
+        color: #4CAF50;
+        }
+        input::placeholder {
+            color: #888; /* Ganti dengan warna yang diinginkan */
+            opacity: 0.8; /* Pastikan opacity adalah 1 agar terlihat */
+        }
+        .delete-item-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+        .delete-item-btn:hover {
+            background-color: #d32f2f;
+        }
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .dialog {
+            width: 500px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .dialog-buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .dialog-buttons button {
+            margin-left: 10px;
+            width: 80px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .dialog-buttons button.primary {
+            width: 80px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+            .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        #download-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #lunasBtn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        #print-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+
+        #download-btn:hover, #print-btn:hover, #lunasBtn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-left">
+        <div class="header">
+<img id="logo" src="https://raw.githubusercontent.com/Irh18/Irh/refs/heads/main/logo.png" alt="Logo Perusahaan" class="logo">
+<div class="customer-info" style="display: flex; align-items: center;">
+    <input type="text" id="customer-name" placeholder="Nama Pelanggan" style="width: 500px; margin-right: 10px;"> <!-- Atur lebar di sini -->
+    <input type="date" id="invoice-date" style="width: 150px;"> <!-- Atur lebar di sini -->
+</div>
+    </div>
+<table id="invoice-table">
+    <thead>
+        <tr>
+            <th>Jenis Pesanan</th>
+            <th>Qty</th>
+            <th>Harga</th>
+            <th>Jumlah</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="text" name="item[]" placeholder="Jenis Pesanan"></td>
+            <td><input type="number" name="qty[]" placeholder="Qty" onchange="calculateTotal()"></td>
+            <td><input type="text" name="price[]" placeholder="Harga" oninput="formatInputRupiah(this)" onchange="calculateTotal()"></td>
+            <td><span class="amount">0</span></td>
+        </tr>
+    </tbody>
+</table>
+
+        <button class="add-item-btn"  onclick="addNewItem()"><i class="fa-solid fa-file"></i> +</button>
+        <button class="delete-item-btn" onclick="deleteLastItem()"><i class="fa-solid fa-trash"></i> -</button>
+
+        <div class="total-section">
+            <p>Total Keseluruhan: <span id="total">0</span></p>
+            <p>DP/ Uang Muka: Rp  <input type="text" id="dp" oninput="formatInputRupiah(this); calculateRemaining()" placeholder="Pembayaran Uang Muka Atau Pelunasan"></p>
+            <p>Sisa Pembayaran: <span id="remaining">0</span></p>
+        </div>
+        <div class="action-buttons">
+            <button class="save-btn" onclick="saveInvoice()">Simpan Nota</button>
+        </div>
+    </div>
+
+    <div class="container-right">
+        <h2>Daftar Invoice</h2>
+        <div class="invoice-list" id="invoiceList">
+            <div class="invoice-item">
+        </div>
+    </div>
+  <div id="invoiceModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="invoiceDetail"></div>       
+      </div>
+  </div>
+
+  <div id="dialogOverlay" class="dialog-overlay">
+    <div id="dialog" class="dialog">
+        <p id="dialogMessage"></p>
+        <div class="dialog-buttons">
+            <button id="dialogOk" class="primary">OK</button>
+            <button id="dialogCancel" style="display: none;">Batal</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+document.querySelector('.close').onclick = closeModal;
+
+function deleteLastItem() {
+        const tableBody = document.querySelector('#invoice-table tbody');
+        const rows = tableBody.querySelectorAll('tr');
+        if (rows.length > 1) {
+            tableBody.removeChild(rows[rows.length - 1]);
+            calculateTotal();
+        } else {
+            showDialog('Tidak dapat menghapus baris terakhir.');
+        }
+    }
+
+function saveInvoice() {
+    const customerName = document.getElementById('customer-name').value;
+    const invoiceDate = document.getElementById('invoice-date').value;
+    const items = [];
+    const rows = document.querySelectorAll('#invoice-table tbody tr');
+
+    rows.forEach(row => {
+        const item = row.querySelector('input[name="item[]"]').value;
+        const qty = row.querySelector('input[name="qty[]"]').value;
+        const price = row.querySelector('input[name="price[]"]').value;
+        const amount = qty * price;
+
+        items.push({ item, qty, price, amount });
+    });
+
+    const total = document.getElementById('total').innerText;
+    const dp = document.getElementById('dp').value;
+    const remaining = document.getElementById('remaining').innerText;
+
+    google.script.run.withSuccessHandler(function() {
+        resetForm();
+        showDialog('Invoice berhasil disimpan.');
+    }).saveInvoice(customerName, invoiceDate, items, total, dp, remaining);
+}
+
+function resetForm() {
+    document.getElementById('customer-name').value = '';
+    document.getElementById('invoice-date').value = '';
+    document.getElementById('dp').value = '';
+    
+    const tableBody = document.querySelector('#invoice-table tbody');
+    tableBody.innerHTML = `
+        <tr>
+            <td><input type="text" name="item[]" placeholder="Jenis Pesanan"></td>
+            <td><input type="number" name="qty[]" placeholder="Qty" onchange="calculateTotal()"></td>
+            <td><input type="text" name="price[]" placeholder="Harga" oninput="formatInputRupiah(this)" onchange="calculateTotal()"></td>
+            <td><span class="amount">0</span></td>
+        </tr>
+    `;
+    
+    document.getElementById('total').innerText = '0';
+    document.getElementById('remaining').innerText = '0';
+    
+    calculateTotal();
+}
+
+function loadInvoices() {
+    google.script.run.withSuccessHandler(displayInvoices).getInvoices();
+}
+
+function displayInvoices(invoices) {
+    const invoiceList = document.getElementById('invoiceList');
+    invoiceList.innerHTML = ''; // Kosongkan kontainer
+
+    if (!Array.isArray(invoices) || invoices.length === 0) {
+        invoiceList.innerHTML = '<p>Tidak ada invoice untuk ditampilkan.</p>';
+        return;
+    }
+
+    invoices.forEach((invoice, index) => {
+        const invoiceItem = document.createElement('div');
+        invoiceItem.className = 'invoice-item';
+        invoiceItem.innerHTML = `
+            <strong>${invoice.name}</strong> <br>${invoice.date}
+            <button class="view-btn" onclick="viewInvoice(${index})">Lihat</button>
+            <button class="delete-btn" onclick="deleteInvoice(${index}, '${invoice.name}', '${invoice.date}')">Hapus</button>
+        `;
+        invoiceList.appendChild(invoiceItem);
+    });
+}
+
+function deleteInvoice(index, customerName, invoiceDate) {
+    showDialog(`Hapus Invoice ${customerName}?`, true, function() {
+        google.script.run.withSuccessHandler(loadInvoices).deleteInvoice(index);
+    });
+}
+
+function viewInvoice(index) {
+    google.script.run.withSuccessHandler(function(invoice) {
+        if (!invoice || !Array.isArray(invoice.items)) {
+            showDialog('Invoice tidak valid atau items tidak ditemukan.');
+            return;
+        }
+
+        const itemsHtml = invoice.items.map(item => `
+            <tr>
+                <td>${item.item}</td>
+                <td>${item.qty}</td>
+                <td>${formatRupiah(parseFloat(item.price))}</td>
+                <td>${formatRupiah(parseFloat(item.amount))}</td>
+            </tr>
+        `).join('');
+
+        const total = parseFloat(invoice.total);
+        const dp = parseFloat(invoice.dp) || 0;
+        const remaining = total - dp; // Menghitung sisa
+
+        const invoiceDetail = document.getElementById('invoiceDetail');
+        invoiceDetail.innerHTML = `
+            <div id="invoiceContent" style="position: relative;">
+                <img src="https://raw.githubusercontent.com/Irh18/Irh/refs/heads/main/logo.png" 
+                     alt="Logo Perusahaan" style="display: block; margin: 20px auto; width: 300px; position: absolute; top: 20%; left: 50%; transform: translateX(-50%); z-index: 1; opacity: 0.1">
+                <h2 style="text-align: left;"><em>Invoice Emirate Catering</em></h2>
+                <p style="text-align: left;"><strong>Nama Pelanggan:</strong> ${invoice.name}</p>
+                <p style="text-align: left;"><strong>Tanggal:</strong> ${invoice.date}</p>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Jenis Pesanan</th>
+                            <th>Qty</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                    </tbody>
+                </table>
+                <p style="text-align: left;"><strong>Total: ${formatRupiah(total)}</strong></p>
+                <p style="text-align: left;"><strong>DP: <span id="dpAmount">${formatRupiah(dp)}</span></strong></p>
+                <p style="text-align: left;">
+                    <strong>Sisa: <span id="remainingAmount">${remaining === 0 ? 'LUNAS' : formatRupiah(remaining)}</span></strong>
+                </p>
+                <p style="text-align: left;"><em>Terima Kasih Telah Mempercayakan Emirate Catering</em></p>
+            </div>
+            <div class="button-container" style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                <button id="download-btn" class="action-btn" onclick="downloadInvoice()">Unduh Invoice</button>
+                <button id="lunasBtn" class="action-btn" onclick="setLunas(${index}, ${total}, ${dp})" ${remaining === 0 ? 'style="display:none;"' : ''}>Lunas</button>
+                <button id="print-btn" class="action-btn" onclick="printInvoice()">Print</button>
+            </div>
+        `;
+
+        document.getElementById('invoiceModal').style.display = 'block';
+    }).getInvoiceDetails(index);
+}
+
+function setLunas(index, total, currentDp) {
+    const dpElement = document.getElementById('dpAmount');
+    const remainingElement = document.getElementById('remainingAmount');
+    const lunasBtn = document.getElementById('lunasBtn');
+
+    dpElement.textContent = formatRupiah(total);
+    remainingElement.textContent = 'LUNAS';
+    lunasBtn.style.display = 'none';
+
+    // Simpan perubahan ke server
+    google.script.run.withSuccessHandler(function(success) {
+        if (success) {
+            showDialog('Invoice telah diubah menjadi lunas.');
+        } else {
+            showDialog('Gagal mengubah status invoice.');
+        }
+    }).updateInvoiceLunas(index, total);
+}
+
+function formatInputRupiah(input) {
+    // Hapus semua karakter non-digit
+    let value = input.value.replace(/\D/g, '');
+    
+    // Jika nilai kosong, kosongkan input
+    if (value === '') {
+        input.value = '';
+        return;
+    }
+    
+    // Konversi ke number
+    value = parseInt(value, 10);
+    
+    // Format sebagai rupiah tanpa simbol mata uang
+    input.value = value.toLocaleString('id-ID');
+
+    // Hitung ulang total setiap kali input berubah
+    calculateTotal();
+}
+
+function formatRupiah(angka) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(angka);
+}
+
+function closeModal() {
+    document.getElementById('invoiceModal').style.display = 'none';
+}
+
+function addNewItem() {
+    const tableBody = document.querySelector('#invoice-table tbody');
+    const newRow = document.createElement('tr');
+    
+    newRow.innerHTML = `
+        <td><input type="text" name="item[]" placeholder="Jenis Pesanan"></td>
+        <td><input type="number" name="qty[]" placeholder="Qty" onchange="calculateTotal()"></td>
+        <td><input type="text" name="price[]" placeholder="Harga" oninput="formatInputRupiah(this)" onchange="calculateTotal()"></td>
+        <td><span class="amount">0</span></td>
+    `;
+    
+    tableBody.appendChild(newRow);
+}
+
+function calculateTotal() {
+    const rows = document.querySelectorAll('#invoice-table tbody tr');
+    let total = 0;
+
+    rows.forEach(row => {
+        const qty = parseFloat(row.querySelector('input[name="qty[]"]').value) || 0;
+        const price = parseFloat(row.querySelector('input[name="price[]"]').value.replace(/\./g, '')) || 0;
+        const amount = qty * price;
+        row.querySelector('.amount').innerText = formatRupiah(amount);
+        total += amount;
+    });
+
+    document.getElementById('total').innerText = formatRupiah(total);
+    calculateRemaining();
+}
+
+
+function calculateRemaining() {
+    const total = parseFloat(document.getElementById('total').innerText.replace(/[^\d,-]+/g, '').replace(',', '.')) || 0;
+    const dp = parseFloat(document.getElementById('dp').value.replace(/\./g, '')) || 0;
+    const remaining = total - dp;
+
+    document.getElementById('remaining').innerText = formatRupiah(remaining > 0 ? remaining : 0);
+}
+
+function downloadInvoice() {
+    const invoiceContent = document.getElementById('invoiceContent'); 
+    invoiceContent.style.padding = '20px'; // Add padding here
+
+    // Use a scale factor for higher resolution
+    const scale = 2; // Adjust this value for higher or lower quality
+
+    html2canvas(invoiceContent, {
+        useCORS: true,
+        scale: scale // Set the scale for higher quality
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL("image/png", 1.0); // Ensure max quality
+        link.download = 'invoice.png'; 
+        link.click(); 
+        invoiceContent.style.padding = ''; // Reset padding after download
+    }).catch(error => {
+        console.error('Error generating canvas:', error);
+    });
+}
+
+function showDialog(message, isConfirm = false, onConfirm = null) {
+            document.getElementById('dialogMessage').textContent = message;
+            document.getElementById('dialogOverlay').style.display = 'block';
+            document.getElementById('dialogCancel').style.display = isConfirm ? 'inline-block' : 'none';
+            
+            document.getElementById('dialogOk').onclick = function() {
+                document.getElementById('dialogOverlay').style.display = 'none';
+                if (isConfirm && onConfirm) onConfirm();
+            };
+            
+            document.getElementById('dialogCancel').onclick = function() {
+                document.getElementById('dialogOverlay').style.display = 'none';
+            };
+        }
+
+// Panggil loadInvoices saat halaman dimuat
+window.onload = loadInvoices;
+
+function printInvoice() {
+    const invoiceModal = document.getElementById('invoiceModal');
+    const modalContent = invoiceModal.querySelector('.modal-content');
+    const invoiceContent = modalContent.cloneNode(true);
+    
+    // Hapus tombol-tombol dari konten yang akan dicetak
+    const buttonContainer = invoiceContent.querySelector('.button-container');
+    if (buttonContainer) {
+        buttonContainer.remove();
+    }
+
+    // Hapus tombol close jika ada
+    const closeButton = invoiceContent.querySelector('.close');
+    if (closeButton) {
+        closeButton.remove();
+    }
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="id">
+        <head>
+            <meta charset="UTF-8">
+            <title></title>
+            <style>
+                ${document.head.getElementsByTagName('style')[0].innerHTML}
+                @page {
+                    size: A4;
+                    margin: 0;
+                }
+                body { 
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    min-height: 100vh;
+                }
+                .print-wrapper {
+                    width: 210mm;
+                    padding: 10mm;
+                    box-sizing: border-box;
+                }
+                .modal-content {
+                    margin: 0 auto;
+                }
+                @media print {
+                    body { 
+                        -webkit-print-color-adjust: exact;
+                    }
+                    .print-wrapper {
+                        width: 100%;
+                        padding: 0;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="print-wrapper">
+                ${invoiceContent.outerHTML}
+            </div>
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    
+    printWindow.onload = function() {
+        printWindow.document.title = '';
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        }, 250);
+    };
+}
+
+
+  const url = 'https://docs.google.com/spreadsheets/d/AKfycbwdYBl4kWcnNgmZRgngrhEwy9u9XDFGViwphzdndPdp/gviz/tq?tqx=out:json';
+
+  fetch(url)
+    .then(response => response.text())
+    .then(data => {
+      const json = JSON.parse(data.substring(47).slice(0, -2)); // Parsing JSON dari respons
+      console.log(json); // Lakukan sesuatu dengan data
+    })
+    .catch(error => console.error('Error:', error));
+
+
+
+    </script>
+</body>
+</html>
